@@ -1,7 +1,7 @@
 -- @formatter:off
 CREATE TABLE if NOT EXISTS animal_type (
     animal_type_id INTEGER PRIMARY KEY,
-    animal_name TEXT NOT NULL
+    name TEXT NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS animal_population (
@@ -37,4 +37,21 @@ CREATE TABLE IF NOT EXISTS unit (
     name TEXT NOT NULL,
     type TEXT NOT NULL,
     conversion_factor REAL NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS purchase (
+    purchase_id INTEGER PRIMARY KEY,
+    feed_id INTEGER NOT NULL,
+    source_id INTEGER NOT NULL,
+    quantity REAL NOT NULL,
+    unit_id INTEGER NOT NULL,
+    cost REAL NOT NULL,
+    date TEXT NOT NULL,
+    FOREIGN KEY(feed_id) REFERENCES Feed(feed_id),
+    FOREIGN KEY(source_id) REFERENCES Source(source_id),
+    FOREIGN KEY(unit_id) REFERENCES Unit(unit_id)
+    );
+
+CREATE TABLE IF NOT EXISTS consumption (
+    consumption_id INTEGER PRIMARY KEY
 );
