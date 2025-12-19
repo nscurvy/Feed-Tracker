@@ -19,3 +19,22 @@ CREATE TABLE if NOT EXISTS animal_population_update (
     reason TEXT,
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
 );
+
+CREATE TABLE IF NOT EXISTS feed (
+    feed_id INTEGER PRIMARY KEY,
+    animal_type_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
+);
+
+CREATE TABLE IF NOT EXISTS source (
+    source_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS unit (
+    unit_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL,
+    conversion_factor REAL NOT NULL
+);
