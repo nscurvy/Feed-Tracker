@@ -1,5 +1,5 @@
 -- @formatter:off
-CREATE TABLE if NOT EXISTS animal_type (
+CREATE TABLE IF NOT EXISTS animal_type (
     animal_type_id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
 );
@@ -7,7 +7,7 @@ CREATE TABLE if NOT EXISTS animal_type (
 CREATE TABLE if NOT EXISTS animal_population (
     animal_type_id INTEGER PRIMARY KEY,
     quantity INTEGER NOT NULL,
-    date_updated DATE NOT NULL,
+    date_updated TEXT NOT NULL,
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE if NOT EXISTS animal_population_update (
     id INTEGER PRIMARY KEY,
     animal_type_id INTEGER NOT NULL,
     delta INTEGER NOT NULL,
-    update_date DATE NOT NULL,
+    update_date TEXT NOT NULL,
     reason TEXT,
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
 );
@@ -46,12 +46,21 @@ CREATE TABLE IF NOT EXISTS purchase (
     quantity REAL NOT NULL,
     unit_id INTEGER NOT NULL,
     cost REAL NOT NULL,
-    date TEXT NOT NULL,
-    FOREIGN KEY(feed_id) REFERENCES Feed(feed_id),
-    FOREIGN KEY(source_id) REFERENCES Source(source_id),
-    FOREIGN KEY(unit_id) REFERENCES Unit(unit_id)
+    purchase_date TEXT NOT NULL,
+    FOREIGN KEY(feed_id) REFERENCES feed(feed_id),
+    FOREIGN KEY(source_id) REFERENCES source(source_id),
+    FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
     );
 
 CREATE TABLE IF NOT EXISTS consumption (
-    consumption_id INTEGER PRIMARY KEY
+    consumption_id INTEGER PRIMARY KEY,
+    feed_id INTEGER NOT NULL,
+    quantity REAL NOT NULL,
+    unit_id INTEGER NOT NULL,
+    animal_type_id INTEGER NOT NULL,
+    consumption_date TEXT NOT NULL,
+    note TEXT,
+    FOREIGN KEY(feed_id) REFERENCES feed(feed_id),
+    FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id),
+    FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
 );
