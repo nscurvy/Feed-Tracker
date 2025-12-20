@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS purchase (
 CREATE TABLE IF NOT EXISTS consumption (
     consumption_id INTEGER PRIMARY KEY,
     feed_id INTEGER NOT NULL,
-    quantity REAL NOT NULL,
+    quantity REAL NOT NULL CHECK (quantity > 0),
     unit_id INTEGER NOT NULL,
     animal_type_id INTEGER NOT NULL,
     consumption_date TEXT NOT NULL,
@@ -70,3 +70,15 @@ CREATE INDEX idx_purchase_date ON purchase(purchase_date);
 CREATE INDEX idx_consumption_date ON consumption(consumption_date);
 CREATE INDEX idx_purchase_feed ON purchase(feed_id);
 CREATE INDEX idx_consumption_feed ON consumption(feed_id);
+
+-- Triggers
+
+CREATE TRIGGER update_population_after_insert
+AFTER INSERT ON animal_population_update
+BEGIN
+    INSERT INTO animal_population (animal_type_id, quantity, date_updated)
+    VALUES (NEW.animal_type_id, NEW.delta, NEW.update_date)
+    ON CONFLICT(animal_type_id) DO UPDATE SET
+        quantity = quantity + NEW.delta,
+        date_updated = NEW.update_date;
+END;
