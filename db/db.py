@@ -7,6 +7,7 @@ SCHEMA_PATH = Path(__file__).parent / "schema.sql"
 
 
 def get_connection(db_path: Path | str = DB_PATH) -> sql.Connection:
+    """Create a connection to a SQLite3 database with foreign keys enabled."""
     if str(db_path) == ':memory:':
         conn = sql.connect(db_path)
     else:
@@ -18,12 +19,11 @@ def get_connection(db_path: Path | str = DB_PATH) -> sql.Connection:
     return conn
 
 
-def initialize_db(conn: sql.Connection,
-                  schema_path: Path | str = SCHEMA_PATH):
+def initialize_db(conn: sql.Connection, schema_path: Path | str = SCHEMA_PATH):
+    """Initialize the given database connection with the path specified by schema_path."""
     schema_path = Path(schema_path)
     with conn:
         if schema_path.exists():
             conn.executescript(schema_path.read_text())
         else:
-            raise FileNotFoundError(f'Schema path {str(schema_path)} does '
-                                    f'not exist.')
+            raise FileNotFoundError(f'Schema path {str(schema_path)} does ' f'not exist.')
