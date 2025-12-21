@@ -1,0 +1,5 @@
+[project]
+name = "FeedTracker"
+
+[project.scripta]
+feedtracker-gui = "feedtracker.gui.main:main"
