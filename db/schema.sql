@@ -3,14 +3,14 @@ CREATE TABLE IF NOT EXISTS animal_type (
     name TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE if NOT EXISTS animal_population (
+CREATE TABLE IF NOT EXISTS animal_population (
     animal_type_id INTEGER PRIMARY KEY,
     quantity INTEGER NOT NULL,
     date_updated TEXT NOT NULL,
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
 );
 
-CREATE TABLE if NOT EXISTS animal_population_update (
+CREATE TABLE IF NOT EXISTS animal_population_update (
     id INTEGER PRIMARY KEY,
     animal_type_id INTEGER NOT NULL,
     delta INTEGER NOT NULL CHECK (delta <> 0),
@@ -24,6 +24,27 @@ CREATE TABLE IF NOT EXISTS feed (
     animal_type_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
+);
+
+CREATE TABLE feed_product (
+    feed_product_id INTEGER PRIMARY KEY,
+    feed_id INTEGER NOT NULL,
+    quantity REAL NOT NULL CHECK (quantity > 0),
+    unit_id INTEGER NOT NULL,
+    source_id INTEGER NOT NULL,
+    cost_cents INTEGER NOT NULL CHECK (cost_cents > 0),
+    date_updated TEXT NOT NULL,
+    FOREIGN KEY(feed_id) REFERENCES feed(feed_id),
+    FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
+    FOREIGN KEY(source_id) REFERENCES source(source_id)
+);
+
+CREATE TABLE feed_product_update (
+    id INTEGER PRIMARY KEY,
+    feed_product_id INTEGER NOT NULL,
+    new_cost_cents INTEGER NOT NULL CHECK (new_cost_cents > 0),
+    date_updated TEXT NOT NULL,
+    FOREIGN KEY(feed_product_id) REFERENCES feed_product(feed_product_id)
 );
 
 CREATE TABLE IF NOT EXISTS source (
@@ -40,16 +61,10 @@ CREATE TABLE IF NOT EXISTS unit (
 
 CREATE TABLE IF NOT EXISTS purchase (
     purchase_id INTEGER PRIMARY KEY,
-    feed_id INTEGER NOT NULL,
-    source_id INTEGER NOT NULL,
-    quantity REAL NOT NULL CHECK (quantity > 0),
-    unit_id INTEGER NOT NULL,
-    cost_cents INTEGER NOT NULL CHECK (cost_cents >= 0),
+    feed_product_id INTEGER NOT NULL,
     purchase_date TEXT NOT NULL,
-    FOREIGN KEY(feed_id) REFERENCES feed(feed_id),
-    FOREIGN KEY(source_id) REFERENCES source(source_id),
-    FOREIGN KEY(unit_id) REFERENCES unit(unit_id)
-    );
+    FOREIGN KEY(feed_product_id) REFERENCES feed_product(feed_product_id)
+);
 
 CREATE TABLE IF NOT EXISTS consumption (
     consumption_id INTEGER PRIMARY KEY,

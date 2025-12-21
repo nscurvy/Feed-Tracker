@@ -27,3 +27,6 @@ def initialize_db(conn: sql.Connection, schema_path: Path | str = SCHEMA_PATH):
             conn.executescript(schema_path.read_text())
         else:
             raise FileNotFoundError(f'Schema path {str(schema_path)} does ' f'not exist.')
+
+
+def log_consumption()
