@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+from .forms.ConsumptionForm import ConsumptionForm
 from .forms.PurchaseForm import PurchaseForm
 
 
@@ -12,7 +13,8 @@ class FeedTrackerApp:
         self.root.configure(background="gray")
 
         self.forms = {
-            "Purchase": PurchaseForm(self.root)
+            'Purchase': PurchaseForm(self.root),
+            'Consumption': ConsumptionForm(self.root)
         }
 
         self.selector = ttk.Combobox(self.root, values=list(self.forms.keys()), state="readonly")
