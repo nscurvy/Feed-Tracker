@@ -1,6 +1,36 @@
 import tkinter as tk
 from tkinter import ttk
 
+from .forms.PurchaseForm import PurchaseForm
+
+
+class FeedTrackerApp:
+    def __init__(self, root: tk.Tk = None):
+        self.root = root
+        self.root.title("Feed Tracker")
+        self.root.geometry("500x500")
+        self.root.configure(background="gray")
+
+        self.forms = {
+            "Purchase": PurchaseForm(self.root)
+        }
+
+        self.selector = ttk.Combobox(self.root, values=list(self.forms.keys()), state="readonly")
+        self.selector.pack(pady=10)
+        self.selector.bind('<<ComboboxSelected>>', self.show_form)
+
+        self.current_form = None
+        self.selector.current(0)
+        self.show_form()
+
+    def show_form(self, event=None):
+        if self.current_form:
+            self.current_form.pack_forget()
+
+        form = self.forms[self.selector.get()]
+        form.pack(fill='both', expand=True)
+        self.current_form = form
+
 
 def focus_next(entry: tk.Entry):
     entry.focus_set()
@@ -12,22 +42,5 @@ def execute():
 
 def run():
     root = tk.Tk()
-    root.title("Test Form")
-    root.geometry("500x500")
-    root.configure(background="gray")
-
-    labels = ['Date', 'Source', 'Brand', 'Feed', 'Cost', 'Size', 'Unit']
-    entries = [tk.Entry(root) for i in labels]
-
-    for i, label in enumerate(labels):
-        tk.Label(root, text=label).grid(row=i, column=1)
-        entries[i].grid(row=i, column=2)
-        if i < len(labels) - 1:
-            entries[i].bind('<Tab>', lambda e, nf=entries[i+1]: focus_next(nf))
-        else:
-            entries[i].bind('<Tab>', lambda e, nf=entries[0]: focus_next(nf))
-
-    button = tk.Button(root, text="Run", command=execute)
-    button.grid(row=len(labels) + 1, column=1)
-
+    app = FeedTrackerApp(root)
     root.mainloop()
