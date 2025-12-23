@@ -89,6 +89,7 @@ CREATE INDEX idx_feed_product_feed ON feed_product(feed_id);
 CREATE INDEX idx_feed_product_source ON feed_product(source_id);
 CREATE INDEX idx_feed_product_update_product_date ON feed_product_update(feed_product_id, date_updated);
 CREATE UNIQUE INDEX uq_feed_product_identity ON feed_product(feed_id, source_id, brand_name, unit_id, quantity);
+CREATE UNIQUE INDEX uq_unit_identity ON unit(name, type);
 CREATE INDEX idx_consumption_feed ON consumption(feed_id);
 
 -- Triggers
