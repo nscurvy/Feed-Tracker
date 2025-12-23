@@ -44,6 +44,12 @@ def get_all(conn: Connection) -> list[AnimalPopulation]:
 
 
 def get_by_name(conn: Connection, name: str) -> AnimalPopulation | None:
+    """
+    Returns a row from the animal_population table by the given name corresponding to a row in the animal_type table.
+    :param conn: The database connection to use.
+    :param name: The name of the corresponding animal_type to return a population for.
+    :return: An AnimalPopulation object or None
+    """
     sql = '''
         SELECT ap.*
         FROM animal_population ap
