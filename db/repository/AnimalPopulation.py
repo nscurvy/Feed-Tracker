@@ -41,3 +41,18 @@ def get_all(conn: Connection) -> list[AnimalPopulation]:
     for row in rows:
         result.append(AnimalPopulation(**row))
     return result
+
+
+def get_by_name(conn: Connection, name: str) -> AnimalPopulation | None:
+    sql = '''
+        SELECT ap.*
+        FROM animal_population ap
+        JOIN animal_type at
+            ON ap.animal_type_id = at.animal_type_id
+        WHERE ap.name = ?
+    '''
+    result = conn.execute(sql, name).fetchone()
+    if result is not None:
+        return AnimalPopulation(**result)
+    else:
+        return None
