@@ -1,6 +1,6 @@
-from sqlite3 import Connection
+from sqlite3 import Connection,Row
 from dataclasses import dataclass
-from datetime import date
+from datetime import date,datetime
 
 
 @dataclass
@@ -11,6 +11,14 @@ class AnimalPopulation:
     animal_type_id: int
     quantity: int
     date_updated: date
+
+
+def _row_to_animal_population(row: Row) -> AnimalPopulation:
+    return AnimalPopulation(
+        animal_type_id=int(row['animal_type_id']),
+        quantity=int(row['quantity']),
+        date_updated=datetime.strptime(row['date_updated'], '%Y-%m-%d').date()
+    )
 
 
 def get_by_id(conn: Connection, animal_type_id: int) -> AnimalPopulation | None:
@@ -24,7 +32,7 @@ def get_by_id(conn: Connection, animal_type_id: int) -> AnimalPopulation | None:
     result = conn.execute('SELECT * FROM animal_population WHERE animal_type_id = ?',
                           animal_type_id).fetchone()
     if result is not None:
-        return AnimalPopulation(**result)
+        return _row_to_animal_population(result)
     else:
         return None
 
@@ -39,7 +47,7 @@ def get_all(conn: Connection) -> list[AnimalPopulation]:
     result = []
     rows = conn.execute('SELECT * FROM animal_population').fetchall()
     for row in rows:
-        result.append(AnimalPopulation(**row))
+        result.append(_row_to_animal_population(row))
     return result
 
 
@@ -59,6 +67,6 @@ def get_by_name(conn: Connection, name: str) -> AnimalPopulation | None:
     '''
     result = conn.execute(sql, name).fetchone()
     if result is not None:
-        return AnimalPopulation(**result)
+        return _row_to_animal_population(result)
     else:
         return None
