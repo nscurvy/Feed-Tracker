@@ -56,3 +56,48 @@ def insert_new(conn: Connection, name: str) -> bool:
     else:
         conn.execute('INSERT INTO animal_type VALUES (?)', (name,))
         return True
+
+
+def get_all(conn: Connection) -> list[AnimalType]:
+    """
+    Retrieves all rows from the animal_type table.
+
+    :param conn: Database connection to use
+    :return: List of AnimalType objects
+    """
+    results = []
+    rows = conn.execute('SELECT * FROM animal_type').fetchall()
+    for row in rows:
+        results.append(AnimalType(**row))
+    return results
+
+
+def delete_by_id(conn: Connection, animal_type_id: int) -> bool:
+    """
+    Deletes a row from the animal_type table corresponding to the given id.
+
+    :param conn: Database connection to use
+    :param animal_type_id: id of the animal_type to delete
+    :return: True if row was successfully deleted, False otherwise
+    """
+    if get_by_id(conn, animal_type_id) is not None:
+        conn.execute('DELETE FROM animal_type WHERE animal_type_id = ?',animal_type_id)
+        return True
+    else:
+        return False
+
+
+def delete_by_name(conn: Connection, name: str) -> bool:
+    """
+    Deletes a row from the animal_type table corresponding to the given name.
+
+    :param conn: Database connection to use
+    :param name: Name of the animal_type to delete
+    :return: True if row was successfully deleted, False otherwise
+    """
+    candidate = get_by_name(conn, name)
+    if candidate is not None:
+        delete_by_id(conn, candidate.animal_type_id)
+        return True
+    else:
+        return False
