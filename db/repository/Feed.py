@@ -55,4 +55,3 @@ def get_all(conn: Connection) -> list[Feed]:
     for row in rows:
         result.append(Feed(**row))
     return result
-
