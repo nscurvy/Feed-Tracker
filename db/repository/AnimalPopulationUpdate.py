@@ -52,3 +52,9 @@ def get_by_name(conn: Connection, name: str) -> list[AnimalPopulationUpdate]:
     for row in rows:
         result.append(_row_to_animal_population_update(row))
     return result
+
+
+def insert_update(conn: Connection, animal_type_id: int, delta: int, date_updated: date, reason: Optional[str] = None) -> AnimalPopulationUpdate:
+    new_id = conn.execute('INSERT INTO animal_population_update VALUES(?,?,?,?) RETURNING id',
+                          (animal_type_id, delta, date_updated.isoformat(), reason)).fetchone()['id']
+    return AnimalPopulationUpdate(new_id, animal_type_id, delta, date_updated, reason)
