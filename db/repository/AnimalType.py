@@ -33,3 +33,4 @@ def insert_new(conn: Connection, name: str) -> bool:
         return False
     else:
         conn.execute('INSERT INTO animal_type VALUES (?)', (name,))
+        return True
