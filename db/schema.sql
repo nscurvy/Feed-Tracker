@@ -102,3 +102,13 @@ BEGIN
         quantity = quantity + NEW.delta,
         date_updated = NEW.date_updated;
 END;
+
+CREATE TRIGGER update_feed_product_on_product_update
+AFTER INSERT ON feed_product_update
+BEGIN
+    UPDATE feed_product
+    SET
+        cost_cents = NEW.cost_cents,
+        date_updated = NEW.date_updated
+    WHERE feed_product_id = NEW.feed_product_id;
+END;
