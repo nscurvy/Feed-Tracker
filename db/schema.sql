@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS animal_type (
 CREATE TABLE IF NOT EXISTS animal_population (
     animal_type_id INTEGER PRIMARY KEY,
     quantity INTEGER NOT NULL,
-    date_updated TEXT NOT NULL CHECK (date_updated GLOB '____-__-__*'), -- ISO8601 Date
+    date_updated TEXT NOT NULL, -- ISO8601 Date
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
 );
 
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS animal_population_update (
     id INTEGER PRIMARY KEY,
     animal_type_id INTEGER NOT NULL,
     delta INTEGER NOT NULL CHECK (delta <> 0),
-    date_updated TEXT NOT NULL CHECK (date_updated GLOB '____-__-__*'), -- ISO8601 Date
+    date_updated TEXT NOT NULL CHECK (date_updated GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'), -- ISO8601 Date
     reason TEXT,
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id)
 );
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS unit (
     conversion_factor REAL NOT NULL
 );
 
-CREATE TABLE feed_product (
+CREATE TABLE IF NOT EXISTS feed_product (
     feed_product_id INTEGER PRIMARY KEY,
     feed_id INTEGER NOT NULL,
     quantity REAL NOT NULL CHECK (quantity > 0),
@@ -52,7 +52,7 @@ CREATE TABLE feed_product (
     FOREIGN KEY(source_id) REFERENCES source(source_id)
 );
 
-CREATE TABLE feed_product_update (
+CREATE TABLE IF NOT EXISTS feed_product_update (
     id INTEGER PRIMARY KEY,
     feed_product_id INTEGER NOT NULL,
     new_cost_cents INTEGER NOT NULL CHECK (new_cost_cents > 0),
@@ -83,18 +83,18 @@ CREATE TABLE IF NOT EXISTS consumption (
 
 -- Indexes
 
-CREATE INDEX idx_purchase_date ON purchase(purchase_date);
-CREATE INDEX idx_consumption_date ON consumption(consumption_date);
-CREATE INDEX idx_feed_product_feed ON feed_product(feed_id);
-CREATE INDEX idx_feed_product_source ON feed_product(source_id);
-CREATE INDEX idx_feed_product_update_product_date ON feed_product_update(feed_product_id, date_updated);
-CREATE UNIQUE INDEX uq_feed_product_identity ON feed_product(feed_id, source_id, brand_name, unit_id, quantity);
-CREATE UNIQUE INDEX uq_unit_identity ON unit(name, type);
-CREATE INDEX idx_consumption_feed ON consumption(feed_id);
+CREATE INDEX IF NOT EXISTS idx_purchase_date ON purchase(purchase_date);
+CREATE INDEX IF NOT EXISTS idx_consumption_date ON consumption(consumption_date);
+CREATE INDEX IF NOT EXISTS idx_feed_product_feed ON feed_product(feed_id);
+CREATE INDEX IF NOT EXISTS idx_feed_product_source ON feed_product(source_id);
+CREATE INDEX IF NOT EXISTS idx_feed_product_update_product_date ON feed_product_update(feed_product_id, date_updated);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_feed_product_identity ON feed_product(feed_id, source_id, brand_name, unit_id, quantity);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_unit_identity ON unit(name, type);
+CREATE INDEX IF NOT EXISTS idx_consumption_feed ON consumption(feed_id);
 
 -- Triggers
 
-CREATE TRIGGER update_population_after_insert
+CREATE TRIGGER IF NOT EXISTS update_population_after_insert
 AFTER INSERT ON animal_population_update
 BEGIN
     INSERT INTO animal_population (animal_type_id, quantity, date_updated)
@@ -104,7 +104,7 @@ BEGIN
         date_updated = NEW.date_updated;
 END;
 
-CREATE TRIGGER update_feed_product_on_product_update
+CREATE TRIGGER IF NOT EXISTS update_feed_product_on_product_update
 AFTER INSERT ON feed_product_update
 BEGIN
     UPDATE feed_product

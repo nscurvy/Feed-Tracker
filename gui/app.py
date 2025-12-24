@@ -1,22 +1,29 @@
 import tkinter as tk
 from tkinter import ttk
+from sqlite3 import Connection
 
 from .forms.ConsumptionForm import ConsumptionForm
 from .forms.ProductForm import ProductForm
 from .forms.PurchaseForm import PurchaseForm
+from .forms.AnimalForm import AnimalForm
+
+from viewmodel import AnimalViewModel
 
 
 class FeedTrackerApp:
-    def __init__(self, root: tk.Tk = None):
+    def __init__(self, root: tk.Tk = None, conn: Connection = None):
         self.root = root
         self.root.title("Feed Tracker")
         self.root.geometry("500x500")
         self.root.configure(background="gray")
 
+        avm = AnimalViewModel(conn)
+
         self.forms = {
             'Log Purchase': PurchaseForm(self.root),
             'Log Consumption': ConsumptionForm(self.root),
             'Add Product': ProductForm(self.root),
+            'Update Animal': AnimalForm(self.root, avm),
         }
 
         self.selector = ttk.Combobox(self.root, values=list(self.forms.keys()), state="readonly")
@@ -44,7 +51,7 @@ def execute():
     pass
 
 
-def run():
+def run(conn: Connection):
     root = tk.Tk()
-    app = FeedTrackerApp(root)
+    app = FeedTrackerApp(root, conn)
     root.mainloop()
