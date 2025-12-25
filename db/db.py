@@ -22,13 +22,15 @@ def get_connection(db_path: Path | str = DB_PATH) -> sql.Connection:
 
 
 def is_initialized(conn: sql.Connection) -> bool:
-    result = conn.execute('SELECT name FROM sqlite_master WHERE type = "table" AND name="schema_meta"').fetchone()
+    result = conn.execute(
+        'SELECT name FROM sqlite_master WHERE type = "table" AND name="schema_meta"').fetchone()
     return result is not None
 
 
 def get_schema_version(conn: sql.Connection) -> Optional[int]:
     if is_initialized(conn):
-        version = conn.execute('SELECT value FROM schema_meta WHERE key = ?', ('schema_version',)).fetchone()
+        version = conn.execute('SELECT value FROM schema_meta WHERE key = ?',
+                               ('schema_version',)).fetchone()
         return int(version[0]) if version else None
     else:
         return None

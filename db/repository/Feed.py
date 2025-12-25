@@ -19,7 +19,8 @@ def get_by_id(conn: Connection, feed_id: int) -> Optional[Feed]:
 
 
 def get_by_animal_type_id(conn: Connection, animal_type_id: int) -> Optional[Feed]:
-    result = conn.execute('SELECT * FROM feed WHERE animal_type_id = ?', (animal_type_id,)).fetchone()
+    result = conn.execute('SELECT * FROM feed WHERE animal_type_id = ?',
+                          (animal_type_id,)).fetchone()
     if result is not None:
         return Feed(**result)
     else:
@@ -36,12 +37,13 @@ def get_by_name(conn: Connection, name: str) -> Optional[Feed]:
 
 def get_by_animal_name(conn: Connection, animal_name: str) -> list[Feed]:
     sql = '''
-        SELECT f.* from feed f
-        JOIN animal_type at
-            ON f.animal_type_id = at.animal_type_id
-        WHERE f.name = ?
-        ORDER BY DESC
-    '''
+          SELECT f.*
+          from feed f
+                   JOIN animal_type at
+                        ON f.animal_type_id = at.animal_type_id
+          WHERE f.name = ?
+          ORDER BY DESC \
+          '''
     result = []
     rows = conn.execute(sql, (animal_name,)).fetchall()
     for row in rows:

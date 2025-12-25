@@ -79,7 +79,7 @@ def delete_by_id(conn: Connection, animal_type_id: int) -> bool:
     :return: True if row was successfully deleted, False otherwise
     """
     if get_by_id(conn, animal_type_id) is not None:
-        conn.execute('DELETE FROM animal_type WHERE animal_type_id = ?',(animal_type_id,))
+        conn.execute('DELETE FROM animal_type WHERE animal_type_id = ?', (animal_type_id,))
         return True
     else:
         return False

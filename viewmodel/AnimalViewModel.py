@@ -2,7 +2,6 @@ from sqlite3 import Connection
 from datetime import datetime, date
 from typing import Optional
 
-
 import db.repository.AnimalType as at
 from db.repository.AnimalType import AnimalType
 import db.repository.AnimalPopulation

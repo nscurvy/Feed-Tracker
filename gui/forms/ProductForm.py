@@ -14,7 +14,8 @@ class ProductForm(ttk.Frame):
             tk.Label(self, text=label).grid(row=i, column=1)
             self.entries[i].grid(row=i, column=2)
             if i < len(labels) - 1:
-                self.entries[i].bind('<Return>', lambda e, nf=self.entries[i + 1]: self.focus_next(nf))
+                self.entries[i].bind('<Return>',
+                                     lambda e, nf=self.entries[i + 1]: self.focus_next(nf))
 
     def focus_next(self, entry: tk.Entry) -> None:
         entry.focus_set()

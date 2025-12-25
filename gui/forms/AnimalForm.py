@@ -18,9 +18,11 @@ class AnimalForm(ttk.Frame):
             tk.Label(master=self, text=label).grid(row=i, column=1)
             self.entries[label].grid(row=i, column=2)
             if i < len(labels) - 1:
-                self.entries[label].bind('<Return>', lambda e, nf=tuple([i for i in self.entries.values()])[i+1]: self.focus_next(nf))
+                self.entries[label].bind('<Return>', lambda e, nf=
+                tuple([i for i in self.entries.values()])[i + 1]: self.focus_next(nf))
         buttonrow = len(labels) + 1
-        tk.Button(self, text='Submit', command=lambda: self.submit(self.entries)).grid(row=buttonrow, column=3)
+        tk.Button(self, text='Submit', command=lambda: self.submit(self.entries)).grid(
+            row=buttonrow, column=3)
         self.successlabel = tk.Label(self)
         self.successlabel.grid(row=buttonrow + 1, column=1)
 

@@ -1,4 +1,4 @@
-from sqlite3 import Connection,Row
+from sqlite3 import Connection, Row
 from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Optional
@@ -41,12 +41,12 @@ def get_all(conn: Connection) -> list[AnimalPopulationUpdate]:
 
 def get_by_name(conn: Connection, name: str) -> list[AnimalPopulationUpdate]:
     sql = '''
-        SELECT apu.* 
-        FROM animal_population_update apu
-        JOIN animal_type at
-            ON apu.animal_type_id = at.animal_type_id
-        WHERE at.name = ?
-    '''
+          SELECT apu.*
+          FROM animal_population_update apu
+                   JOIN animal_type at
+                        ON apu.animal_type_id = at.animal_type_id
+          WHERE at.name = ? \
+          '''
     rows = conn.execute(sql, (name,)).fetchall()
     result = []
     for row in rows:
@@ -54,8 +54,10 @@ def get_by_name(conn: Connection, name: str) -> list[AnimalPopulationUpdate]:
     return result
 
 
-def insert_update(conn: Connection, animal_type_id: int, delta: int, date_updated: date, reason: Optional[str] = None) -> AnimalPopulationUpdate:
+def insert_update(conn: Connection, animal_type_id: int, delta: int, date_updated: date,
+                  reason: Optional[str] = None) -> AnimalPopulationUpdate:
     print(date_updated.isoformat())
-    new_id = conn.execute('INSERT INTO animal_population_update(animal_type_id, delta, date_updated, reason) VALUES(?,?,?,?)',
-                          (animal_type_id, delta, date_updated.isoformat(), reason)).lastrowid
+    new_id = conn.execute(
+        'INSERT INTO animal_population_update(animal_type_id, delta, date_updated, reason) VALUES(?,?,?,?)',
+        (animal_type_id, delta, date_updated.isoformat(), reason)).lastrowid
     return AnimalPopulationUpdate(new_id, animal_type_id, delta, date_updated, reason)

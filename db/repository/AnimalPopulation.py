@@ -1,6 +1,6 @@
-from sqlite3 import Connection,Row
+from sqlite3 import Connection, Row
 from dataclasses import dataclass
-from datetime import date,datetime
+from datetime import date, datetime
 
 
 @dataclass
@@ -59,12 +59,12 @@ def get_by_name(conn: Connection, name: str) -> AnimalPopulation | None:
     :return: An AnimalPopulation object or None
     """
     sql = '''
-        SELECT ap.*
-        FROM animal_population ap
-        JOIN animal_type at
-            ON ap.animal_type_id = at.animal_type_id
-        WHERE ap.name = ?
-    '''
+          SELECT ap.*
+          FROM animal_population ap
+                   JOIN animal_type at
+                        ON ap.animal_type_id = at.animal_type_id
+          WHERE ap.name = ? \
+          '''
     result = conn.execute(sql, name).fetchone()
     if result is not None:
         return _row_to_animal_population(result)

@@ -15,7 +15,7 @@ class PurchaseForm(ttk.Frame):
             tk.Label(self, text=label).grid(row=i, column=1)
             self.entries[i].grid(row=i, column=2)
             if i < len(labels) - 1:
-                self.entries[i].bind('<Tab>', lambda e, nf=self.entries[i+1]: self.focus_next(nf))
+                self.entries[i].bind('<Tab>', lambda e, nf=self.entries[i + 1]: self.focus_next(nf))
             else:
                 self.entries[i].bind('<Tab>', lambda e, nf=self.entries[0]: self.focus_next(nf))
 
