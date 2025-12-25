@@ -3,3 +3,6 @@ name = "FeedTracker"
 
 [project.scripta]
 feedtracker-gui = "feedtracker.gui.main:main"
+
+[dependency-groups]
+tests = ["pytest", "pytest-cov"]
