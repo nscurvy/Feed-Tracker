@@ -1,3 +1,8 @@
+CREATE TABLE IF NOT EXISTS schema_meta (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS animal_type (
     animal_type_id INTEGER PRIMARY KEY,
     name TEXT NOT NULL UNIQUE
@@ -33,7 +38,7 @@ CREATE TABLE IF NOT EXISTS source (
 
 CREATE TABLE IF NOT EXISTS unit (
     unit_id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
     type TEXT NOT NULL,
     conversion_factor REAL NOT NULL
 );
@@ -109,7 +114,10 @@ AFTER INSERT ON feed_product_update
 BEGIN
     UPDATE feed_product
     SET
-        cost_cents = NEW.cost_cents,
+        cost_cents = NEW.new_cost_cents,
         date_updated = NEW.date_updated
     WHERE feed_product_id = NEW.feed_product_id;
 END;
+
+
+INSERT INTO schema_meta (key, value) VALUES ('schema_version', '1') ON CONFLICT DO NOTHING;
