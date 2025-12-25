@@ -1,7 +1,7 @@
 [project]
 name = "FeedTracker"
 
-[project.scripta]
+[project.scripts]
 feedtracker-gui = "feedtracker.gui.main:main"
 
 [dependency-groups]
