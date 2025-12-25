@@ -1,3 +1,4 @@
+from sqlite3 import Error
 import tkinter as tk
 from tkinter import ttk
 
@@ -27,8 +28,11 @@ class AnimalForm(ttk.Frame):
         entry.focus_set()
 
     def submit(self, values: dict[str, tk.Entry]) -> None:
-        self.viewmodel.update_animal(animal_name=values['Animal Name'].get(),
-                                     delta=int(values['Population Change'].get()),
-                                     date_of_change=values['Date of Change'].get(),
-                                     reason=values['Reason (Optional)'].get())
-        self.successlabel['text'] = "Success!"
+        try:
+            self.viewmodel.update_animal(animal_name=values['Animal Name'].get(),
+                                         delta=values['Population Change'].get(),
+                                         date_of_change=values['Date of Change'].get(),
+                                         reason=values['Reason (Optional)'].get())
+            self.successlabel['text'] = "Success!"
+        except Error as error:
+            self.successlabel['text'] = f'Error! {error.sqlite_errorname}'

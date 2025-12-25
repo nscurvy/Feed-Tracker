@@ -15,9 +15,11 @@ class AnimalViewModel:
     def __init__(self, conn: Connection) -> None:
         self.conn = conn
 
-    def update_animal(self, animal_name: str, delta: int, date_of_change: str, reason: Optional[str]):
+    def update_animal(self, animal_name: str, delta: str, date_of_change: str, reason: str):
         animal_name = animal_name.lower()
         date_of_change = datetime.strptime(date_of_change, '%Y-%m-%d').date()
+        delta = int(delta) if delta != '' else None
+        reason = reason if reason != '' else None
         candidate = at.get_by_name(self.conn, animal_name)
         if candidate is None:
             new_id = at.insert_new(self.conn, animal_name)
