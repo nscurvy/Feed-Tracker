@@ -24,7 +24,7 @@ def _row_to_animal_population_update(row: Row) -> AnimalPopulationUpdate:
 
 
 def get_by_id(conn: Connection, id: int) -> Optional[AnimalPopulationUpdate]:
-    result = conn.execute('SELECT * FROM animal_population WHERE id = ?', (id,)).fetchone()
+    result = conn.execute('SELECT * FROM animal_population_update WHERE id = ?', (id,)).fetchone()
     if result:
         return _row_to_animal_population_update(result)
     else:
@@ -33,7 +33,7 @@ def get_by_id(conn: Connection, id: int) -> Optional[AnimalPopulationUpdate]:
 
 def get_all(conn: Connection) -> list[AnimalPopulationUpdate]:
     result = []
-    rows = conn.execute('SELECT * FROM animal_population ORDER BY id').fetchall()
+    rows = conn.execute('SELECT * FROM animal_population_update ORDER BY id').fetchall()
     for row in rows:
         result.append(_row_to_animal_population_update(row))
     return result
@@ -56,7 +56,6 @@ def get_by_name(conn: Connection, name: str) -> list[AnimalPopulationUpdate]:
 
 def insert_update(conn: Connection, animal_type_id: int, delta: int, date_updated: date,
                   reason: Optional[str] = None) -> AnimalPopulationUpdate:
-    print(date_updated.isoformat())
     new_id = conn.execute(
         'INSERT INTO animal_population_update(animal_type_id, delta, date_updated, reason) VALUES(?,?,?,?)',
         (animal_type_id, delta, date_updated.isoformat(), reason)).lastrowid

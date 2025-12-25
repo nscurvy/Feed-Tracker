@@ -63,9 +63,9 @@ def get_by_name(conn: Connection, name: str) -> AnimalPopulation | None:
           FROM animal_population ap
                    JOIN animal_type at
                         ON ap.animal_type_id = at.animal_type_id
-          WHERE ap.name = ? \
+          WHERE at.name = ? \
           '''
-    result = conn.execute(sql, name).fetchone()
+    result = conn.execute(sql, (name,)).fetchone()
     if result is not None:
         return _row_to_animal_population(result)
     else:
