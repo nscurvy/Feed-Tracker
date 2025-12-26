@@ -19,7 +19,7 @@ This project also gives me an opportunity for something to add to a Portfolio to
 software development and which is also something useful, fun, and interesting to me.
 
 ### Dependencies
-*Nothing to show*
+- Pytest for tests.
 
 ### Usage
 *Nothing to show*
