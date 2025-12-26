@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS feed_product (
     source_id INTEGER NOT NULL,
     brand_name TEXT NOT NULL,
     cost_cents INTEGER NOT NULL CHECK (cost_cents > 0),
-    date_updated TEXT NOT NULL CHECK (date_updated GLOB '____-__-__*'), -- ISO8601 Date
+    date_updated TEXT NOT NULL CHECK (date_updated GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'), -- ISO8601 Date
     FOREIGN KEY(feed_id) REFERENCES feed(feed_id),
     FOREIGN KEY(unit_id) REFERENCES unit(unit_id),
     FOREIGN KEY(source_id) REFERENCES source(source_id)
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS feed_product_update (
     id INTEGER PRIMARY KEY,
     feed_product_id INTEGER NOT NULL,
     new_cost_cents INTEGER NOT NULL CHECK (new_cost_cents > 0),
-    date_updated TEXT NOT NULL CHECK (date_updated GLOB '____-__-__*'), -- ISO8601 Date
+    date_updated TEXT NOT NULL CHECK (date_updated GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'), -- ISO8601 Date
     FOREIGN KEY(feed_product_id) REFERENCES feed_product(feed_product_id)
 );
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS purchase (
     purchase_id INTEGER PRIMARY KEY,
     feed_product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
-    purchase_date TEXT NOT NULL CHECK (purchase_date GLOB '____-__-__*'), -- ISO8601 Date
+    purchase_date TEXT NOT NULL CHECK (purchase_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'), -- ISO8601 Date
     FOREIGN KEY(feed_product_id) REFERENCES feed_product(feed_product_id)
 );
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS consumption (
     quantity REAL NOT NULL CHECK (quantity > 0),
     unit_id INTEGER NOT NULL,
     animal_type_id INTEGER NOT NULL,
-    consumption_date TEXT NOT NULL CHECK (consumption_date GLOB '____-__-__*'), -- ISO8601 Date
+    consumption_date TEXT NOT NULL CHECK (consumption_date GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'), -- ISO8601 Date
     note TEXT,
     FOREIGN KEY(feed_id) REFERENCES feed(feed_id),
     FOREIGN KEY(animal_type_id) REFERENCES animal_type(animal_type_id),

@@ -23,3 +23,6 @@ software development and which is also something useful, fun, and interesting to
 
 ### Usage
 *Nothing to show*
+
+
+**Note**: Test data was generated using ChatGPT. 
