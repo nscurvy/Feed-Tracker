@@ -30,7 +30,7 @@ def get_by_id(conn: Connection, animal_type_id: int) -> AnimalPopulation | None:
     :return: An AnimalPopulation object or None
     """
     result = conn.execute('SELECT * FROM animal_population WHERE animal_type_id = ?',
-                          animal_type_id).fetchone()
+                          (animal_type_id,)).fetchone()
     if result is not None:
         return _row_to_animal_population(result)
     else:
@@ -68,5 +68,16 @@ def get_by_name(conn: Connection, name: str) -> AnimalPopulation | None:
     result = conn.execute(sql, (name,)).fetchone()
     if result is not None:
         return _row_to_animal_population(result)
+    else:
+        return None
+
+
+def get_name_by_id(conn: Connection, animal_type_id: int) -> str | None:
+    sql = '''
+        SELECT name from animal_type where animal_type_id = ?
+    '''
+    result = conn.execute(sql, (animal_type_id,)).fetchone()
+    if result is not None:
+        return result['name']
     else:
         return None
