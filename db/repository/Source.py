@@ -31,3 +31,12 @@ def get_by_name(conn: Connection, name: str) -> Optional[Source]:
         return Source(**result)
     else:
         return None
+
+
+def check_or_insert(conn: Connection, name: str) -> Source:
+    row = conn.execute('SELECT * FROM source WHERE name = ?', (name,)).fetchone()
+    if row is not None:
+        return Source(**row)
+    else:
+        id = conn.execute('INSERT INTO source (name) VALUES (?)', (name,)).lastrowid
+        return Source(source_id=id, name=name)

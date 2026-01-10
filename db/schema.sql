@@ -94,6 +94,7 @@ CREATE INDEX IF NOT EXISTS idx_feed_product_feed ON feed_product(feed_id);
 CREATE INDEX IF NOT EXISTS idx_feed_product_source ON feed_product(source_id);
 CREATE INDEX IF NOT EXISTS idx_feed_product_update_product_date ON feed_product_update(feed_product_id, date_updated);
 CREATE UNIQUE INDEX IF NOT EXISTS uq_feed_product_identity ON feed_product(feed_id, source_id, brand_name, unit_id, quantity);
+CREATE UNIQUE INDEX IF NOT EXISTS uq_feed_identity ON feed(name, animal_type_id);
 CREATE UNIQUE INDEX IF NOT EXISTS uq_unit_identity ON unit(name, type);
 CREATE INDEX IF NOT EXISTS idx_consumption_feed ON consumption(feed_id);
 
@@ -117,6 +118,13 @@ BEGIN
         cost_cents = NEW.new_cost_cents,
         date_updated = NEW.date_updated
     WHERE feed_product_id = NEW.feed_product_id;
+END;
+
+CREATE TRIGGER IF NOT EXISTS feed_product_update_on_feed_product_insert
+AFTER INSERT ON feed_product
+BEGIN
+    INSERT INTO feed_product_update (feed_product_id, new_cost_cents, date_updated)
+    VALUES (NEW.feed_product_id, NEW.cost_cents, NEW.date_updated);
 END;
 
 

@@ -7,7 +7,7 @@ from .forms.ProductForm import ProductForm
 from .forms.PurchaseForm import PurchaseForm
 from .forms.AnimalForm import AnimalForm
 
-from viewmodel import AnimalViewModel
+from viewmodel import AnimalViewModel, ProductViewModel
 
 
 class FeedTrackerApp:
@@ -18,11 +18,12 @@ class FeedTrackerApp:
         self.root.configure(background="gray")
 
         avm = AnimalViewModel(conn)
+        pvm = ProductViewModel(conn)
 
         self.forms = {
             'Log Purchase': PurchaseForm(self.root),
             'Log Consumption': ConsumptionForm(self.root),
-            'Add Product': ProductForm(self.root),
+            'Add Product': ProductForm(self.root, pvm),
             'Update Animal': AnimalForm(self.root, avm),
         }
 

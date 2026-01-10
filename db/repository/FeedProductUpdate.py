@@ -28,3 +28,8 @@ def get_all(conn: Connection) -> list[FeedProductUpdate]:
     for row in rows:
         result.append(_row_to_feed_product_update(row))
     return result
+
+
+def insert(conn: Connection, feed_product_id: int, new_cost: int, date_updated: str) -> FeedProductUpdate:
+    inserted = conn.execute('INSERT INTO feed_product_update (feed_product_id, new_cost, date_updated) VALUES (?, ?, ?) RETURNING *', (feed_product_id, new_cost, date_updated)).fetchone()
+    return _row_to_feed_product_update(inserted)

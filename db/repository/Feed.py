@@ -41,8 +41,7 @@ def get_by_animal_name(conn: Connection, animal_name: str) -> list[Feed]:
           from feed f
                    JOIN animal_type at
                         ON f.animal_type_id = at.animal_type_id
-          WHERE f.name = ?
-          ORDER BY DESC \
+          WHERE at.name = ?
           '''
     result = []
     rows = conn.execute(sql, (animal_name,)).fetchall()
@@ -57,3 +56,25 @@ def get_all(conn: Connection) -> list[Feed]:
     for row in rows:
         result.append(Feed(**row))
     return result
+
+
+def check_or_insert(conn: Connection, feed: str, animal_type: str) -> Feed:
+    check_sql = '''
+        SELECT f.* 
+        from feed f 
+            JOIN animal_type at
+                ON f.animal_type_id = at.animal_type_id
+        WHERE at.name = ? AND f.name = ?
+    '''
+    insert_sql = '''
+        INSERT INTO feed (name, animal_type_id) 
+            SELECT ?, animal_type_id 
+            FROM animal_type WHERE name = ?
+            RETURNING feed_id, animal_type_id, name
+    '''
+    row = conn.execute(check_sql, (animal_type, feed)).fetchone()
+    if row is not None:
+        return Feed(**row)
+    else:
+        result = conn.execute(insert_sql, (feed, animal_type)).fetchone()
+        return Feed(**result)

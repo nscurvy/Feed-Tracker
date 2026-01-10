@@ -5,9 +5,9 @@ INSERT INTO unit (name, type, conversion_factor) VALUES
 ON CONFLICT DO NOTHING;
 
 INSERT INTO source (name) VALUES
-    ('TSC'),
-    ('Amazon'),
-    ('Elma F&F')
+    ('tsc'),
+    ('amazon'),
+    ('elma f&f')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO animal_type (name) VALUES ('duck') ON CONFLICT DO NOTHING;

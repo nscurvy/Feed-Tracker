@@ -1,6 +1,6 @@
 from typing import Any, Optional
 
-from InvalidFormSubmissionError import InvalidFormSubmissionError
+import exception.InvalidFormSubmissionError as InvalidFormSubmissionError
 
 
 class InvalidFieldValueError(InvalidFormSubmissionError):
