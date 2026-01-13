@@ -27,3 +27,8 @@ def get_all(conn: Connection) -> list[Purchase]:
     for row in rows:
         result.append(_row_to_purchase(row))
     return result
+
+
+def insert(conn: Connection, feed_product_id: int, quantity: int, purchase_date: date) -> Purchase:
+    result = conn.execute('INSERT INTO purchase (feed_product_id, quantity, purchase_date) VALUES (?, ?, ?) RETURNING *', (feed_product_id, quantity, purchase_date)).fetchone()
+    return _row_to_purchase(result)

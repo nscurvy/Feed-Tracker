@@ -1,2 +1,3 @@
 from .AnimalViewModel import AnimalViewModel
 from .ProductViewModel import ProductViewModel
+from .PurchaseViewModel import PurchaseViewModel
